@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import plot_confusion_matrix, plot_roc_curve, plot_precision_recall_curve
+from sklearn.metrics import confusion_matrix, plot_roc_curve, plot_precision_recall_curve, ConfusionMatrixDisplay
 from sklearn.metrics import precision_score, recall_score
 
 def main():
@@ -14,6 +14,7 @@ def main():
     st.sidebar.title("Binary Classification Web App")
     st.markdown("Are your mushrooms edible or poisonous? 🍄")
     st.sidebar.markdown("Are your mushrooms edible or poisonous? 🍄")
+    st.set_option('deprecation.showPyplotGlobalUse', False)
 
     @st.cache(persist=True)
     def load_data():
@@ -33,7 +34,9 @@ def main():
     def plot_metrics(metrics_list):
         if 'Confusion Matrix' in metrics_list:
             st.subheader("Confusion Matrix")
-            plot_confusion_matrix(model, x_test, y_test, display_labels=class_names)
+            cm=confusion_matrix(y_test,y_pred)
+            disp=ConfusionMatrixDisplay(confusion_matrix=cm,display_labels=class_names)
+            disp.plot()
             st.pyplot()
 
         if 'ROC Curve' in metrics_list:
